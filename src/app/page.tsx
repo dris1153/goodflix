@@ -1,5 +1,5 @@
-import HomePage from '@/modules/HomePage/HomePage'
+import { DiscoverPage } from '@/modules/Discover'
 
 export default function Home() {
-    return <HomePage />
+    return <DiscoverPage />
 }
