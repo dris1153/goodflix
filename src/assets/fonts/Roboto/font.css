@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(./Roboto-Thin.ttf) format('truetype');
+    font-weight: 100;
+    font-display: block;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url(./Roboto-ThinItalic.ttf) format('truetype');
+    font-weight: 100;
+    font-display: block;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(./Roboto-Regular.ttf) format('truetype');
+    font-weight: 400;
+    font-display: block;
+}
