@@ -1,14 +1,14 @@
 /**
  * POST /api/search
  * Body: { query: string (max 200), moodId?: string }
- * Flow: Gemini → TMDB match (throttled) → multi-tier pad → 48 results.
+ * Flow: LLM → TMDB match (throttled) → multi-tier pad → 48 results.
  * F1: No in-memory LRU. TanStack Query handles client-side session cache.
- * F5: Request 72 from Gemini, filter confidence >= 0.6, multi-tier pad to 48.
+ * F5: Request 72 from LLM, filter confidence >= 0.6, multi-tier pad to 48.
  * Returns: { movies: Movie[], fallback: SearchFallback }
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { runVibeSearch } from '@/apis/gemini/vibe-search'
+import { runVibeSearch } from '@/apis/llm/vibe-search'
 import { searchMovie } from '@/apis/tmdb/search'
 import { getPopular, getTopRated, getUpcoming } from '@/apis/tmdb/discover'
 import { schedule } from '@/apis/tmdb/throttle'
@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
     const moodSeedQuery = mood?.seedQuery
 
     try {
-        // Step 1: Gemini titles
-        const geminiTitles = await runVibeSearch(query, moodSeedQuery)
-        const filtered = geminiTitles.filter((t) => t.confidence >= MIN_CONFIDENCE)
+        // Step 1: LLM titles
+        const llmTitles = await runVibeSearch(query, moodSeedQuery)
+        const filtered = llmTitles.filter((t) => t.confidence >= MIN_CONFIDENCE)
 
         // Step 2: TMDB match each title (rate-limited via throttle)
         const matchPromises = filtered.map((t) => schedule(() => searchMovie(t.title, t.year)))
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
         let movies: Movie[] = dedupeById(matched.filter((m): m is Movie => m !== null))
 
-        let fallback: SearchFallback = 'gemini'
+        let fallback: SearchFallback = 'llm'
 
         // Step 3: Multi-tier pad if under target
         if (movies.length < TARGET) {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
             fallback,
         })
     } catch (err) {
-        console.error('[/api/search] Gemini error, falling back to popular:', err)
+        console.error('[/api/search] LLM error, falling back to popular:', err)
         try {
             const movies = await getPopular()
             return NextResponse.json({ movies, fallback: 'popular-fallback' satisfies SearchFallback })

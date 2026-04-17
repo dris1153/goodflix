@@ -39,14 +39,14 @@ export interface MoodChip {
     palette: MoodPalette
 }
 
-export type SearchFallback = 'gemini' | 'partial' | 'popular-fallback'
+export type SearchFallback = 'llm' | 'partial' | 'popular-fallback'
 
 export interface SearchResponse {
     movies: Movie[]
     fallback: SearchFallback
 }
 
-export interface GeminiTitle {
+export interface LlmTitle {
     title: string
     year: number | null
     confidence: number

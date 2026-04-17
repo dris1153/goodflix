@@ -21,21 +21,22 @@ Set via Vercel dashboard → Settings → Environment Variables. Never commit ac
 | Name                  | Scope        | Description                                                              |
 | --------------------- | ------------ | ------------------------------------------------------------------------ |
 | `NEXT_PUBLIC_APP_URL` | All          | Deployed URL (e.g., `https://goodflix.vercel.app`). Used by Origin gate. |
-| `GEMINI_API_KEY`      | All (server) | Google AI Studio key. https://aistudio.google.com/apikey                 |
+| `OPENAI_API_KEY`      | All (server) | OpenAI API key. https://platform.openai.com/api-keys                     |
+| `OPENAI_MODEL`        | All (server) | Model alias or date-pinned snapshot (default: `gpt-4o-mini`).            |
 | `TMDB_BEARER_TOKEN`   | All (server) | TMDB v4 read access token. https://www.themoviedb.org/settings/api       |
 | `TMDB_IMAGE_BASE`     | Optional     | Override default `https://image.tmdb.org/t/p`.                           |
 
 ## Pre-Deploy Checklist
 
-1. **GCP budget cap.** In Google Cloud Console → Billing → Budgets & alerts, set:
-    - Daily budget alert at target spend.
-    - Hard cap via quota override (Generative Language API) if feasible.
-    - Max output tokens per request already capped server-side (512 for trivia, schema-bound for vibe search).
+1. **OpenAI budget cap.** In OpenAI platform → Usage & limits, set:
+    - Usage alerts at target spend.
+    - Max completion tokens per request already capped server-side (512 for trivia, schema-bound for vibe search).
+    - Monitor `gpt-4o-mini` spend (or alternate model via `OPENAI_MODEL` env var).
 2. **TMDB token.** Verify v4 bearer token has `account.id` access via a manual `curl` to `https://api.themoviedb.org/3/movie/popular`.
 3. **Bundle check.** Run `ANALYZE=true pnpm build` (once analyzer is installed post-MVP). Confirm:
-    - No `GEMINI_API_KEY` / `TMDB_BEARER_TOKEN` values in any `.next/static/**` chunk.
+    - No `OPENAI_API_KEY` / `TMDB_BEARER_TOKEN` values in any `.next/static/**` chunk.
     - `three.js` / `@react-three/*` in async chunk (dynamic-imported by `DiscoverPage`).
-    - No `@google/genai` in any client chunk.
+    - No `openai` package in any client chunk.
 4. **Route runtime confirmation.**
     - `/api/search/trivia` → Edge (`export const runtime = 'edge'`).
     - All others → Node (default).
@@ -73,7 +74,7 @@ Lighthouse scores recorded as baseline — not blocking. See red-team review 202
 | Trigger                        | Upgrade                                                  |
 | ------------------------------ | -------------------------------------------------------- |
 | Any Vercel quota > 80%         | Pro tier ($20/mo)                                        |
-| Gemini daily cost > threshold  | Upstash Redis-backed rate limiter (replaces Origin gate) |
+| OpenAI daily cost > threshold  | Upstash Redis-backed rate limiter (replaces Origin gate) |
 | User demand for watchlist/auth | Add NextAuth + Postgres/Neon                             |
 | SEO need                       | Server-render `/movie/[id]` detail pages                 |
 

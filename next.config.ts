@@ -6,7 +6,7 @@ const CSP = [
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://image.tmdb.org",
     "font-src 'self' data:",
-    "connect-src 'self' https://generativelanguage.googleapis.com https://api.themoviedb.org https://image.tmdb.org",
+    "connect-src 'self' https://api.themoviedb.org https://image.tmdb.org",
     'frame-src https://www.youtube-nocookie.com',
     "media-src 'self' blob:",
     "object-src 'none'",

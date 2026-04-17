@@ -9,18 +9,19 @@ export const envConfig = {
  * Never read these on the client — names have no NEXT_PUBLIC_ prefix.
  */
 export function getServerEnv() {
-    const geminiApiKey = process.env.GEMINI_API_KEY
+    const openaiApiKey = process.env.OPENAI_API_KEY
+    const openaiModel = process.env.OPENAI_MODEL ?? 'gpt-4o-mini'
     const tmdbBearerToken = process.env.TMDB_BEARER_TOKEN
     const tmdbImageBase = process.env.TMDB_IMAGE_BASE ?? 'https://image.tmdb.org/t/p'
 
-    if (envConfig.isProduction) {
-        if (!geminiApiKey) throw new Error('GEMINI_API_KEY missing')
-        if (!tmdbBearerToken) throw new Error('TMDB_BEARER_TOKEN missing')
-    }
+    // Throw in all envs — dev silent-empty causes hard-to-diagnose 401s downstream
+    if (!openaiApiKey) throw new Error('OPENAI_API_KEY missing — set it in .env')
+    if (!tmdbBearerToken) throw new Error('TMDB_BEARER_TOKEN missing — set it in .env')
 
     return {
-        geminiApiKey: geminiApiKey ?? '',
-        tmdbBearerToken: tmdbBearerToken ?? '',
+        openaiApiKey,
+        openaiModel,
+        tmdbBearerToken,
         tmdbImageBase,
     }
 }

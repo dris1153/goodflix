@@ -56,7 +56,7 @@ export function useVibeSearch() {
             setLastQuery(variables.query.trim().slice(0, 200))
         },
         onSuccess: (data, variables) => {
-            // F5: respect actual count — may be < 48 depending on Gemini yield
+            // F5: respect actual count — may be < 48 depending on LLM yield
             setCurrentMovies(data.movies)
             // Session cache: repeat same query within session skips network
             const key = normalizeQueryKey(variables.query, variables.moodId)

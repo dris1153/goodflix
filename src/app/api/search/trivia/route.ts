@@ -10,9 +10,9 @@
  * - Abort propagation via req.signal → abortCtrl
  * - X-Accel-Buffering: no to disable nginx buffering
  * - ctrl.close() in finally to guarantee stream end
- * F13 fix: REST fetch direct — no @google/genai SDK on Edge runtime
+ * F13 fix: REST fetch direct — no LLM SDK on Edge runtime
  */
-import { streamTrivia } from '@/apis/gemini/trivia'
+import { streamTrivia } from '@/apis/llm/trivia'
 
 export const runtime = 'edge'
 
@@ -28,7 +28,7 @@ export async function GET(req: Request): Promise<Response> {
 
     const abortCtrl = new AbortController()
 
-    // Propagate client disconnect → abort Gemini call
+    // Propagate client disconnect → abort LLM call
     req.signal.addEventListener('abort', () => abortCtrl.abort())
 
     const stream = new ReadableStream({
@@ -63,7 +63,7 @@ export async function GET(req: Request): Promise<Response> {
                     if (i >= 5) break
                 }
             } catch {
-                // Gemini failure — emit error event, overlay hides gracefully
+                // LLM failure — emit error event, overlay hides gracefully
                 try {
                     ctrl.enqueue(
                         encoder.encode(`event: error\ndata: ${JSON.stringify({ message: 'trivia unavailable' })}\n\n`),
