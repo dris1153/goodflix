@@ -7,7 +7,7 @@ const CSP = [
     "img-src 'self' data: blob: https://image.tmdb.org",
     "font-src 'self' data:",
     "connect-src 'self' https://generativelanguage.googleapis.com https://api.themoviedb.org https://image.tmdb.org",
-    "frame-src https://www.youtube-nocookie.com",
+    'frame-src https://www.youtube-nocookie.com',
     "media-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
@@ -16,9 +16,7 @@ const CSP = [
 
 const nextConfig: NextConfig = {
     images: {
-        remotePatterns: [
-            { protocol: 'https', hostname: 'image.tmdb.org', pathname: '/t/p/**' },
-        ],
+        remotePatterns: [{ protocol: 'https', hostname: 'image.tmdb.org', pathname: '/t/p/**' }],
     },
     output: 'standalone',
     eslint: {

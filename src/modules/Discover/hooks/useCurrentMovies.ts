@@ -19,7 +19,6 @@ async function fetchPopular(): Promise<DiscoverResponse> {
  */
 export function useCurrentMovies() {
     const currentMovies = useDiscoverStore((s) => s.currentMovies)
-    const setCurrentMovies = useDiscoverStore((s) => s.setCurrentMovies)
     const hasMovies = currentMovies.length > 0
 
     return useQuery({
@@ -28,11 +27,6 @@ export function useCurrentMovies() {
         staleTime: 1000 * 60 * 10,
         enabled: !hasMovies,
         select: (data) => data.movies,
-        // Seed store on success without subscribing to result in render
-        // (DiscoverPage reads movies directly from store)
-        structuralSharing: false,
-        // Side-effect: seed store when data arrives
-        // Using meta to carry callback — cleaner than wrapper
     })
 }
 

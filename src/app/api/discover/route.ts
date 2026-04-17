@@ -29,18 +29,17 @@ export async function GET(request: NextRequest) {
     if (!parsed.success) {
         return NextResponse.json(
             { error: 'Invalid list param. Must be: popular | top_rated | upcoming' },
-            { status: 400 }
+            { status: 400 },
         )
     }
 
     const validList = parsed.data
 
     try {
-        const fetchMovies = unstable_cache(
-            getListFetcher(validList),
-            ['discover', validList],
-            { revalidate: 3600, tags: ['discover', `discover:${validList}`] }
-        )
+        const fetchMovies = unstable_cache(getListFetcher(validList), ['discover', validList], {
+            revalidate: 3600,
+            tags: ['discover', `discover:${validList}`],
+        })
 
         const movies = await fetchMovies()
         return NextResponse.json({ movies })

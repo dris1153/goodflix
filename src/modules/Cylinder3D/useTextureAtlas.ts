@@ -11,22 +11,37 @@ const LOAD_TIMEOUT_MS = 10_000
 
 // Load a single image with crossOrigin + timeout + abort signal.
 // Resolves with HTMLImageElement on success, null on failure/abort.
-async function loadImage(
-    url: string,
-    signal: AbortSignal,
-): Promise<HTMLImageElement | null> {
+async function loadImage(url: string, signal: AbortSignal): Promise<HTMLImageElement | null> {
     return new Promise((resolve) => {
-        if (signal.aborted) { resolve(null); return }
+        if (signal.aborted) {
+            resolve(null)
+            return
+        }
 
         const img = new Image()
         img.crossOrigin = 'anonymous'
 
-        const timer = setTimeout(() => { img.src = ''; resolve(null) }, LOAD_TIMEOUT_MS)
-        const onAbort = () => { clearTimeout(timer); img.src = ''; resolve(null) }
+        const timer = setTimeout(() => {
+            img.src = ''
+            resolve(null)
+        }, LOAD_TIMEOUT_MS)
+        const onAbort = () => {
+            clearTimeout(timer)
+            img.src = ''
+            resolve(null)
+        }
         signal.addEventListener('abort', onAbort, { once: true })
 
-        img.onload = () => { clearTimeout(timer); signal.removeEventListener('abort', onAbort); resolve(img) }
-        img.onerror = () => { clearTimeout(timer); signal.removeEventListener('abort', onAbort); resolve(null) }
+        img.onload = () => {
+            clearTimeout(timer)
+            signal.removeEventListener('abort', onAbort)
+            resolve(img)
+        }
+        img.onerror = () => {
+            clearTimeout(timer)
+            signal.removeEventListener('abort', onAbort)
+            resolve(null)
+        }
 
         img.src = url
     })
@@ -65,12 +80,7 @@ function buildAtlas(
             ctx.fillRect(px, py, CELL_W, CELL_H)
         }
 
-        uvOffsets.push([
-            px / canvasW,
-            py / canvasH,
-            CELL_W / canvasW,
-            CELL_H / canvasH,
-        ])
+        uvOffsets.push([px / canvasW, py / canvasH, CELL_W / canvasW, CELL_H / canvasH])
     }
 
     const texture = new THREE.CanvasTexture(canvas)
@@ -94,7 +104,9 @@ interface AtlasState extends Atlas {
 // Hook: accept posterUrls[], return { texture, uvOffsets, ready }.
 // Double-buffer: previous atlas stays mounted until new one is fully built.
 // Disposes old texture on swap to prevent GPU memory leak (red-team F4).
-export function useTextureAtlas(posterUrls: string[]): (AtlasState & { ready: true }) | { ready: false; texture: null; uvOffsets: null } {
+export function useTextureAtlas(
+    posterUrls: string[],
+): (AtlasState & { ready: true }) | { ready: false; texture: null; uvOffsets: null } {
     const [atlas, setAtlas] = useState<AtlasState | null>(null)
     // Hold previous atlas ref for double-buffer (keep rendering until new ready)
     const prevTextureRef = useRef<THREE.CanvasTexture | null>(null)
@@ -116,9 +128,7 @@ export function useTextureAtlas(posterUrls: string[]): (AtlasState & { ready: tr
 
         ;(async () => {
             // Load all images in parallel; failed loads return null (skip, not crash)
-            const images = await Promise.all(
-                posterUrls.map((url) => loadImage(url, signal)),
-            )
+            const images = await Promise.all(posterUrls.map((url) => loadImage(url, signal)))
 
             if (signal.aborted) return
 
@@ -144,7 +154,7 @@ export function useTextureAtlas(posterUrls: string[]): (AtlasState & { ready: tr
         return () => {
             controller.abort()
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlsKey(posterUrls)])
 
     // Dispose previous texture after render cycle completes swap

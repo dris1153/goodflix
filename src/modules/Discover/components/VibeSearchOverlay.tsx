@@ -38,31 +38,23 @@ const VibeSearchOverlay: FC = () => {
     }
 
     return (
-        <div className="flex flex-col gap-3 w-full max-w-2xl">
+        <div className="flex w-full max-w-2xl flex-col gap-3">
             <div className="flex items-center gap-3">
                 <div className="flex-1">
-                    <SearchBar
-                        onSubmit={handleTextSearch}
-                        disabled={isSearching}
-                        placeholder="Search by vibe…"
-                    />
+                    <SearchBar onSubmit={handleTextSearch} disabled={isSearching} placeholder="Search by vibe…" />
                 </div>
                 {/* Loading indicator — visible during atlas rebuild (F4: up to 2.5s) */}
                 {isSearching && (
                     <div
                         aria-label="Searching…"
                         role="status"
-                        className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin shrink-0"
+                        className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-white/20 border-t-white"
                     />
                 )}
             </div>
-            <MoodChips
-                activeMoodId={activeMoodId}
-                onSelect={handleChipSelect}
-                disabled={isSearching}
-            />
+            <MoodChips activeMoodId={activeMoodId} onSelect={handleChipSelect} disabled={isSearching} />
             {searchError && (
-                <p role="alert" className="text-xs text-red-400/80 px-1">
+                <p role="alert" className="px-1 text-xs text-red-400/80">
                     {searchError}
                 </p>
             )}

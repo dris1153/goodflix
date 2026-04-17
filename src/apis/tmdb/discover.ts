@@ -36,7 +36,7 @@ function normalizeMovie(raw: TmdbMovieRaw, imageBase: string): Movie | null {
 async function fetchList(list: string): Promise<Movie[]> {
     const { tmdbImageBase } = getServerEnv()
     const data = await schedule(() =>
-        tmdbFetch<TmdbDiscoverResponse>(`/movie/${list}`, { language: 'en-US', page: '1' })
+        tmdbFetch<TmdbDiscoverResponse>(`/movie/${list}`, { language: 'en-US', page: '1' }),
     )
     return data.results.flatMap((r) => {
         const movie = normalizeMovie(r, tmdbImageBase)

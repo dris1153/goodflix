@@ -72,13 +72,15 @@ export async function searchMovie(title: string, year?: number | null): Promise<
         }
 
         // Log rejected matches for debugging
-        console.warn(JSON.stringify({
-            event: 'tmdb_match_rejected',
-            geminiTitle: title,
-            topResult: result.title,
-            similarity: similarity.toFixed(3),
-            yearDelta: year && resultYear ? Math.abs(year - resultYear) : null,
-        }))
+        console.warn(
+            JSON.stringify({
+                event: 'tmdb_match_rejected',
+                geminiTitle: title,
+                topResult: result.title,
+                similarity: similarity.toFixed(3),
+                yearDelta: year && resultYear ? Math.abs(year - resultYear) : null,
+            }),
+        )
 
         // Only evaluate top result
         break

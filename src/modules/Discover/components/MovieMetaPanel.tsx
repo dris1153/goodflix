@@ -24,13 +24,12 @@ export default function MovieMetaPanel({ movie }: MovieMetaPanelProps) {
     const topCast = cast.slice(0, 5)
 
     const isLongOverview = overview.length > OVERVIEW_LIMIT
-    const displayedOverview =
-        isLongOverview && !overviewExpanded ? `${overview.slice(0, OVERVIEW_LIMIT)}…` : overview
+    const displayedOverview = isLongOverview && !overviewExpanded ? `${overview.slice(0, OVERVIEW_LIMIT)}…` : overview
 
     return (
         <div className="flex flex-col gap-4 overflow-y-auto md:w-1/2">
             {/* Title */}
-            <h2 className="font-serif text-2xl font-bold leading-tight text-white md:text-3xl">{title}</h2>
+            <h2 className="font-serif text-2xl leading-tight font-bold text-white md:text-3xl">{title}</h2>
 
             {/* Meta row: year · runtime · rating */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-400">
@@ -64,14 +63,12 @@ export default function MovieMetaPanel({ movie }: MovieMetaPanelProps) {
             )}
 
             {/* Tagline */}
-            {tagline && (
-                <p className="italic text-sm text-neutral-400 leading-relaxed">{tagline}</p>
-            )}
+            {tagline && <p className="text-sm leading-relaxed text-neutral-400 italic">{tagline}</p>}
 
             {/* Overview */}
             {overview && (
                 <div>
-                    <p className="text-sm text-neutral-300 leading-relaxed">{displayedOverview}</p>
+                    <p className="text-sm leading-relaxed text-neutral-300">{displayedOverview}</p>
                     {isLongOverview && (
                         <button
                             onClick={() => setOverviewExpanded((v) => !v)}
@@ -86,10 +83,10 @@ export default function MovieMetaPanel({ movie }: MovieMetaPanelProps) {
             {/* Cast row — top 5 */}
             {topCast.length > 0 && (
                 <div>
-                    <p className="mb-2 text-xs font-medium uppercase tracking-widest text-neutral-600">Cast</p>
+                    <p className="mb-2 text-xs font-medium tracking-widest text-neutral-600 uppercase">Cast</p>
                     <div className="flex flex-wrap gap-3">
                         {topCast.map((member) => (
-                            <div key={member.id} className="flex flex-col items-center gap-1 w-14">
+                            <div key={member.id} className="flex w-14 flex-col items-center gap-1">
                                 {/* Avatar: profile image or initials circle */}
                                 {member.profileUrl ? (
                                     // eslint-disable-next-line @next/next/no-img-element
@@ -110,7 +107,7 @@ export default function MovieMetaPanel({ movie }: MovieMetaPanelProps) {
                                         </span>
                                     </div>
                                 )}
-                                <span className="w-full text-center text-[10px] leading-tight text-neutral-500 truncate">
+                                <span className="w-full truncate text-center text-[10px] leading-tight text-neutral-500">
                                     {member.name}
                                 </span>
                             </div>

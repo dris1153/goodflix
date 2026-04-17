@@ -13,11 +13,7 @@ interface SearchBarProps {
  * - 200-char cap matches server zod schema (F2).
  * - Disabled during isSearching (F7).
  */
-const SearchBar: FC<SearchBarProps> = ({
-    onSubmit,
-    disabled = false,
-    placeholder = 'Search by vibe…',
-}) => {
+const SearchBar: FC<SearchBarProps> = ({ onSubmit, disabled = false, placeholder = 'Search by vibe…' }) => {
     const [value, setValue] = useState('')
 
     function handleSubmit(e?: FormEvent) {
@@ -32,11 +28,7 @@ const SearchBar: FC<SearchBarProps> = ({
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="flex items-center gap-2 w-full"
-            aria-label="Vibe search"
-        >
+        <form onSubmit={handleSubmit} className="flex w-full items-center gap-2" aria-label="Vibe search">
             <input
                 type="text"
                 value={value}
@@ -49,8 +41,8 @@ const SearchBar: FC<SearchBarProps> = ({
                 className={[
                     'flex-1 rounded-full bg-white/10 px-5 py-3 text-sm text-white',
                     'placeholder-neutral-500 backdrop-blur outline-none',
-                    'border border-white/10 focus:border-white/30 transition-colors',
-                    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/15',
+                    'border border-white/10 transition-colors focus:border-white/30',
+                    disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-white/15',
                 ].join(' ')}
             />
             <button
@@ -59,9 +51,9 @@ const SearchBar: FC<SearchBarProps> = ({
                 aria-label="Submit search"
                 className={[
                     'rounded-full px-5 py-3 text-sm font-medium transition-all',
-                    'bg-white/15 text-white backdrop-blur border border-white/15',
-                    'hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/30',
-                    disabled || !value.trim() ? 'opacity-40 cursor-not-allowed' : '',
+                    'border border-white/15 bg-white/15 text-white backdrop-blur',
+                    'hover:bg-white/25 focus:ring-2 focus:ring-white/30 focus:outline-none',
+                    disabled || !value.trim() ? 'cursor-not-allowed opacity-40' : '',
                 ].join(' ')}
             >
                 Search

@@ -45,12 +45,15 @@ export function useVibeSearch() {
     const setCurrentMovies = useDiscoverStore((s) => s.setCurrentMovies)
     const setSearching = useDiscoverStore((s) => s.setSearching)
     const setSearchError = useDiscoverStore((s) => s.setSearchError)
+    const setLastQuery = useDiscoverStore((s) => s.setLastQuery)
 
     return useMutation({
         mutationFn: postSearch,
-        onMutate: () => {
+        onMutate: (variables) => {
             setSearching(true)
             setSearchError(null)
+            // Phase 5: store the submitted query so TriviaOverlay can request relevant facts
+            setLastQuery(variables.query.trim().slice(0, 200))
         },
         onSuccess: (data, variables) => {
             // F5: respect actual count — may be < 48 depending on Gemini yield

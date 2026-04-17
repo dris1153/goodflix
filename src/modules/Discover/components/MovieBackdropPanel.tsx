@@ -26,7 +26,7 @@ export default function MovieBackdropPanel({
 
     if (isPlaying) {
         return (
-            <div className="w-full md:w-1/2 shrink-0">
+            <div className="w-full shrink-0 md:w-1/2">
                 <TrailerEmbed trailerKey={trailerKey} movieTitle={movieTitle} />
             </div>
         )
@@ -37,7 +37,7 @@ export default function MovieBackdropPanel({
         : null
 
     return (
-        <div className="relative w-full md:w-1/2 shrink-0 overflow-hidden rounded-lg">
+        <div className="relative w-full shrink-0 overflow-hidden rounded-lg md:w-1/2">
             {/* Backdrop image */}
             {backdropSrc ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -61,17 +61,15 @@ export default function MovieBackdropPanel({
                 <button
                     onClick={onPlay}
                     aria-label={`Play trailer for ${movieTitle}`}
-                    className="absolute inset-0 flex items-center justify-center group"
+                    className="group absolute inset-0 flex items-center justify-center"
                 >
-                    <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-all group-hover:bg-white/30 group-hover:scale-110">
-                        <PlayIcon className="h-7 w-7 text-white translate-x-0.5" />
+                    <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-all group-hover:scale-110 group-hover:bg-white/30">
+                        <PlayIcon className="h-7 w-7 translate-x-0.5 text-white" />
                     </span>
                 </button>
             ) : (
-                <div className="absolute bottom-3 left-0 right-0 flex justify-center">
-                    <span className="rounded bg-black/60 px-3 py-1 text-xs text-neutral-400">
-                        Trailer unavailable
-                    </span>
+                <div className="absolute right-0 bottom-3 left-0 flex justify-center">
+                    <span className="rounded bg-black/60 px-3 py-1 text-xs text-neutral-400">Trailer unavailable</span>
                 </div>
             )}
         </div>

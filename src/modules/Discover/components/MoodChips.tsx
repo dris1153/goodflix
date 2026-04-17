@@ -20,7 +20,7 @@ const MoodChips: FC<MoodChipsProps> = ({ activeMoodId, onSelect, disabled = fals
         <div
             role="group"
             aria-label="Mood filters"
-            className="flex gap-2 overflow-x-auto pb-1 scrollbar-none"
+            className="scrollbar-none flex gap-2 overflow-x-auto pb-1"
             style={{ scrollbarWidth: 'none' }}
         >
             {MOOD_CHIPS.map((chip) => {
@@ -37,17 +37,17 @@ const MoodChips: FC<MoodChipsProps> = ({ activeMoodId, onSelect, disabled = fals
                         onClick={() => onSelect(chip)}
                         aria-pressed={isActive}
                         className={[
-                            'flex items-center gap-1.5 shrink-0 rounded-full px-4 py-2 text-xs font-medium',
-                            'backdrop-blur transition-all border',
+                            'flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium',
+                            'border backdrop-blur transition-all',
                             isActive
-                                ? 'bg-white/20 border-white/50 text-white ring-1 ring-white/40'
-                                : 'bg-white/8 border-white/10 text-neutral-300 hover:bg-white/15 hover:text-white',
-                            disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
+                                ? 'border-white/50 bg-white/20 text-white ring-1 ring-white/40'
+                                : 'border-white/10 bg-white/8 text-neutral-300 hover:bg-white/15 hover:text-white',
+                            disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
                         ].join(' ')}
                     >
                         {/* Palette tint swatch */}
                         <span
-                            className="inline-block w-2 h-2 rounded-full shrink-0"
+                            className="inline-block h-2 w-2 shrink-0 rounded-full"
                             style={{ backgroundColor: tintCss, opacity: isActive ? 1 : 0.6 }}
                             aria-hidden="true"
                         />

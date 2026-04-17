@@ -38,14 +38,12 @@ const YT_KEY_RE = /^[A-Za-z0-9_-]{11}$/
 function pickTrailerKey(videos: TmdbVideo[]): string | null {
     // Prefer official YouTube trailers
     const official = videos.find(
-        (v) => v.site === 'YouTube' && v.type === 'Trailer' && v.official && YT_KEY_RE.test(v.key)
+        (v) => v.site === 'YouTube' && v.type === 'Trailer' && v.official && YT_KEY_RE.test(v.key),
     )
     if (official) return official.key
 
     // Fall back to any YouTube trailer
-    const any = videos.find(
-        (v) => v.site === 'YouTube' && v.type === 'Trailer' && YT_KEY_RE.test(v.key)
-    )
+    const any = videos.find((v) => v.site === 'YouTube' && v.type === 'Trailer' && YT_KEY_RE.test(v.key))
     return any?.key ?? null
 }
 
@@ -56,7 +54,7 @@ export async function getMovie(id: number): Promise<MovieDetail> {
         tmdbFetch<TmdbMovieDetailRaw>(`/movie/${id}`, {
             append_to_response: 'videos,credits',
             language: 'en-US',
-        })
+        }),
     )
 
     const cast = raw.credits.cast.slice(0, 10).map((c) => ({

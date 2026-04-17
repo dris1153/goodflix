@@ -10,7 +10,7 @@ import { GeminiTitle } from '@/core/types/movie.type'
 import { getGenAI } from './client'
 
 const SYSTEM_INSTRUCTION =
-    'You are a film curator. Given a user\'s vibe/mood query, return 72 distinct movie titles ' +
+    "You are a film curator. Given a user's vibe/mood query, return 72 distinct movie titles " +
     'matching the vibe. Include diverse decades and international films. ' +
     'Output strictly as JSON array matching the schema.'
 

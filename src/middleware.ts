@@ -16,9 +16,7 @@ export function middleware(request: NextRequest) {
         const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
 
         const allowed =
-            !origin ||
-            origin.startsWith(appUrl) ||
-            (!envConfig.isProduction && origin.startsWith('http://localhost'))
+            !origin || origin.startsWith(appUrl) || (!envConfig.isProduction && origin.startsWith('http://localhost'))
 
         if (!allowed) {
             return new NextResponse('forbidden', { status: 403 })

@@ -18,11 +18,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     }
 
     try {
-        const fetchMovie = unstable_cache(
-            () => getMovie(id),
-            ['movie', String(id)],
-            { revalidate: 86400 }
-        )
+        const fetchMovie = unstable_cache(() => getMovie(id), ['movie', String(id)], { revalidate: 86400 })
 
         const movie = await fetchMovie()
         return NextResponse.json(movie)

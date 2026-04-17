@@ -22,9 +22,7 @@ export default function PosterInstances({
     const materialRef = useRef<ShaderMaterial>(null!)
 
     // Radius derived from circumference so posters tile evenly
-    const radius = count > 0
-        ? (count * (POSTER_W + GAP)) / TWO_PI
-        : (POSTER_W + GAP) / TWO_PI
+    const radius = count > 0 ? (count * (POSTER_W + GAP)) / TWO_PI : (POSTER_W + GAP) / TWO_PI
 
     // Build per-instance matrices and UV attribute data
     const { matrices, uvFlat } = useMemo(() => {
@@ -35,11 +33,7 @@ export default function PosterInstances({
         for (let i = 0; i < count; i++) {
             const angle = (i / count) * TWO_PI
             // Position on cylinder circumference, face inward toward origin
-            dummy.position.set(
-                Math.sin(angle) * radius,
-                0,
-                Math.cos(angle) * radius,
-            )
+            dummy.position.set(Math.sin(angle) * radius, 0, Math.cos(angle) * radius)
             // Rotate poster to face inward (toward the axis)
             dummy.rotation.y = angle
             dummy.updateMatrix()
@@ -68,10 +62,7 @@ export default function PosterInstances({
 
         // Set aUvOffset per-instance attribute
         const geom = mesh.geometry as THREE.BufferGeometry
-        geom.setAttribute(
-            'aUvOffset',
-            new THREE.InstancedBufferAttribute(uvFlat, 4),
-        )
+        geom.setAttribute('aUvOffset', new THREE.InstancedBufferAttribute(uvFlat, 4))
     }
 
     // Update mood uniforms each frame (only when changed)
@@ -109,7 +100,10 @@ export default function PosterInstances({
     const handlePointerUp = (e: THREE.Event & { instanceId?: number; nativeEvent?: PointerEvent }) => {
         if (disabled || !pointerDownRef.current) return
         const id = (e as { instanceId?: number }).instanceId
-        if (id == null || id !== pointerDownRef.current.instanceId) { pointerDownRef.current = null; return }
+        if (id == null || id !== pointerDownRef.current.instanceId) {
+            pointerDownRef.current = null
+            return
+        }
 
         const ne = (e as { nativeEvent?: PointerEvent }).nativeEvent
         const dx = (ne?.clientX ?? 0) - pointerDownRef.current.x
@@ -118,7 +112,10 @@ export default function PosterInstances({
         const dt = Date.now() - pointerDownRef.current.t
 
         // Treat as drag if movement > 5px or held > 250ms
-        if (dist > 5 || dt > 250) { pointerDownRef.current = null; return }
+        if (dist > 5 || dt > 250) {
+            pointerDownRef.current = null
+            return
+        }
 
         const movie = movies[id]
         if (movie && movie.id === pointerDownRef.current.movieId) {

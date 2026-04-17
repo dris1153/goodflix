@@ -50,9 +50,7 @@ export async function POST(request: NextRequest) {
         const filtered = geminiTitles.filter((t) => t.confidence >= MIN_CONFIDENCE)
 
         // Step 2: TMDB match each title (rate-limited via throttle)
-        const matchPromises = filtered.map((t) =>
-            schedule(() => searchMovie(t.title, t.year))
-        )
+        const matchPromises = filtered.map((t) => schedule(() => searchMovie(t.title, t.year)))
         const matched = await Promise.all(matchPromises)
 
         let movies: Movie[] = dedupeById(matched.filter((m): m is Movie => m !== null))
